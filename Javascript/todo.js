@@ -10,6 +10,20 @@ function addTodo(text, checked = false) {
   todoListElement.appendChild(li);
 }
 
+function makeDeleteButton(li) {
+  const deleteButton = document.createElement("button");
+  deleteButton.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
+  deleteButton.textContent = "삭제";
+  deleteButton.addEventListener("click", () => {
+    const todos = loadTodos();
+    const index = Array.from(li.parentElement.children).indexOf(li);
+    todos.splice(index, 1);
+    saveTodos(todos);
+    li.remove();
+  });
+  return deleteButton;
+}
+
 //할 일 목록 저장
 function saveTodos(todoList) {
   const todos = todoList.map(item => ({
