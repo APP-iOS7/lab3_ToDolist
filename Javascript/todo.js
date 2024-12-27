@@ -3,11 +3,46 @@ const addButton = document.getElementById("addTodo");
 const todoInput = document.getElementById("todoInput");
 
 function addTodo(text, checked = false) {
+  // li 요소 만들기
   const li = document.createElement("li");
-  li.textContent = text;
-  li.classList.add("list-group-item");
+  li.classList.add(
+    "list-group-item",
+    "d-flex",
+    "align-items-center",
+    "justify-content-between"
+  );
 
-  todoListElement.appendChild(li);
+  // 체크박스 만들기
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.classList.add("form-check-input");
+  // checkbox 요소 checked 프로퍼티에 checked 파라미터의 값 (true/false) 할당
+  checkbox.checked = checked;
+
+  // 텍스트 추가
+  const spanElement = document.createElement("span");
+  spanElement.classList.add("ms-2", "flex-grow-1");
+  spanElement.textContent = text;
+
+  // 체크박스 상태에 따라 취소선 처리
+  spanElement.style.textDecoration = checked ? "line-through" : "none";
+
+  // 체크박스 클릭시 처리
+  // 체크박스의 값이 변경되면, 여기서 정의한 함수가 실행됨 (지연 실행)
+  checkbox.addEventListener("change", () => {
+    spanElement.style.textDecoration = checkbox.checked ? "line-through" : "none";
+
+    // localStorage 업데이트
+    const todos = loadTodos();
+    const index = Array.from(li.parentElement.children).indexOf(li);
+    todos[index].checked = checkbox.checked;
+    saveTodos(todos);
+  });
+
+  li.prepend(checkbox);
+  li.append(spanElement);
+  li.append(makeDeleteButton(li));
+  todoListElement.append(li);
 }
 
 function makeDeleteButton(li) {
@@ -25,10 +60,7 @@ function makeDeleteButton(li) {
 }
 
 //할 일 목록 저장
-function saveTodos(todoList) {
-  const todos = todoList.map((item) => ({
-    text: item,
-  }));
+function saveTodos(todos) {
   localStorage.setItem("todoList", JSON.stringify(todos));
 }
 
@@ -54,7 +86,6 @@ function initialize() {
 
       // // localStorage 업데이트
       const todos = loadTodos();
-      todos.push(todoData);
       saveTodos({ text: todoInput.value, checked: false });
 
       // 입력창 비우기
