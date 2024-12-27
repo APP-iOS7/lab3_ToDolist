@@ -10,6 +10,7 @@ function addTodo(text, checked = false) {
   todoListElement.appendChild(li);
 }
 
+//할 일 목록 저장
 function saveTodos() {
   const todos = Array.from(todoListElement.children).map(li => ({
       text: li.textContent.trim(),
@@ -17,11 +18,13 @@ function saveTodos() {
   localStorage.setItem('todoList', JSON.stringify(todos));
 }
 
+//할 일 목록 가져오기
 function loadTodos() {
   const savedTodos = localStorage.getItem('todoList');
   return savedTodos ? JSON.parse(savedTodos) : [];
 }
 
+//초기화 함수
 function initialize() {
   const todos = loadTodos();
   todos.forEach(todo => {
@@ -41,4 +44,5 @@ function initialize() {
   });
 }
 
+//페이지 로드시 초기화
 document.addEventListener('DOMContentLoaded', initialize);
