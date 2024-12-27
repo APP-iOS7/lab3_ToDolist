@@ -30,19 +30,83 @@ function addTodo(text, checked = false) {
   // 체크박스 클릭시 처리
   // 체크박스의 값이 변경되면, 여기서 정의한 함수가 실행됨 (지연 실행)
   checkbox.addEventListener("change", () => {
-    spanElement.style.textDecoration = checkbox.checked ? "line-through" : "none";
+    spanElement.style.textDecoration = checkbox.checked
+      ? "line-through"
+      : "none";
 
     // localStorage 업데이트
     const todos = loadTodos();
-    const index = Array.from(li.parentElement.children).indexOf(li);
+    const index = Array.prototype.indexOf.call(li.parentElement.children, li);
     todos[index].checked = checkbox.checked;
     saveTodos(todos);
   });
 
   li.prepend(checkbox);
   li.append(spanElement);
+  li.append(makeEditButton(li));
   li.append(makeDeleteButton(li));
   todoListElement.append(li);
+}
+
+function makeEditButton(li) {
+  const editButton = document.createElement("button");
+  editButton.classList.add("btn", "btn-warning", "btn-sm", "ms-2");
+  editButton.textContent = "수정";
+
+  editButton.addEventListener("click", () => {
+    const spanElement = li.querySelector("span");
+    let inputElement = li.querySelector("input[type='text']");
+
+    if (!inputElement) {
+      spanElement.style.display = "none";
+
+      inputElement = document.createElement("input");
+      inputElement.type = "text";
+      inputElement.className = "form-control form-control-sm";
+      inputElement.placeholder = "수정할 일을 입력해주세요.";
+      inputElement.value = spanElement.textContent;
+      inputElement.style.marginLeft = "8px";
+
+      li.insertBefore(inputElement, spanElement);
+
+      inputElement.focus();
+      inputElement.setSelectionRange(0, inputElement.value.length);
+
+      editButton.classList.remove("btn-warning");
+      editButton.classList.add("btn-success");
+      editButton.textContent = "완료";
+
+      // 엔터 키 이벤트 리스너 추가
+      inputElement.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault(); // 기본 엔터 동작(새 줄 추가) 방지
+          completeEdit();
+        }
+      });
+    } else completeEdit();
+
+    function completeEdit() {
+      if (inputElement.value.trim() === "") {
+        alert("최소 한 글자 이상 입력해주세요.");
+        return;
+      }
+      spanElement.textContent = inputElement.value.trim();
+      spanElement.style.display = "inline";
+
+      inputElement.remove();
+
+      editButton.classList.remove("btn-success");
+      editButton.classList.add("btn-warning");
+      editButton.textContent = "수정";
+
+      const todos = loadTodos();
+      const index = Array.prototype.indexOf.call(li.parentElement.children, li);
+      todos[index].text = spanElement.textContent;
+      saveTodos(todos);
+    }
+  });
+
+  return editButton;
 }
 
 function makeDeleteButton(li) {
@@ -79,9 +143,8 @@ function initialize() {
 
   todoInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
-      if (todoInput.value.trim() === "")
-      {
-        alert("할 일을 입력해주세요.");
+      if (todoInput.value.trim() === "") {
+        alert("최소 한 글자 이상 입력해주세요.");
         return; // 빈 입력 방지
       }
 
@@ -99,9 +162,8 @@ function initialize() {
   });
 
   addButton.addEventListener("click", () => {
-    if (todoInput.value.trim() === "")
-    {
-      alert("할 일을 입력해주세요.");
+    if (todoInput.value.trim() === "") {
+      alert("최소 한 글자 이상 입력해주세요.");
       return;
     }
 
