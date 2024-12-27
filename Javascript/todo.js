@@ -11,10 +11,10 @@ function addTodo(text, checked = false) {
 }
 
 //할 일 목록 저장
-function saveTodos() {
-  const todos = Array.from(todoListElement.children).map(li => ({
-      text: li.textContent.trim(),
-    }));
+function saveTodos(todoList) {
+  const todos = todoList.map(item => ({
+    text: item.trim(),
+  }));
   localStorage.setItem('todoList', JSON.stringify(todos));
 }
 
