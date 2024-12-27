@@ -100,8 +100,10 @@ function initialize() {
 
   addButton.addEventListener("click", () => {
     if (todoInput.value.trim() === "")
+    {
       alert("할 일을 입력해주세요.");
       return;
+    }
 
     addTodo(todoInput.value);
 
