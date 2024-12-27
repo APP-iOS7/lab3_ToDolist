@@ -79,7 +79,11 @@ function initialize() {
 
   todoInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
-      if (todoInput.value.trim() === "") return; // 빈 입력 방지
+      if (todoInput.value.trim() === "")
+      {
+        alert("할 일을 입력해주세요.");
+        return; // 빈 입력 방지
+      }
 
       // 새로운 할일 추가
       addTodo(todoInput.value);
@@ -95,7 +99,9 @@ function initialize() {
   });
 
   addButton.addEventListener("click", () => {
-    if (todoInput.value.trim() === "") return;
+    if (todoInput.value.trim() === "")
+      alert("할 일을 입력해주세요.");
+      return;
 
     addTodo(todoInput.value);
 
