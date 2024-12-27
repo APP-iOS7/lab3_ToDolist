@@ -13,7 +13,7 @@ function addTodo(text, checked = false) {
 //할 일 목록 저장
 function saveTodos(todoList) {
   const todos = todoList.map(item => ({
-    text: item.trim(),
+    text: item,
   }));
   localStorage.setItem('todoList', JSON.stringify(todos));
 }
