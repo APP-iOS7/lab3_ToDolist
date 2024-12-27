@@ -61,24 +61,24 @@ function makeEditButton(li) {
     if (!inputElement) {
       spanElement.style.display = "none";
 
-      inputElement = document.createElement("input");
-      inputElement.type = "text";
-      inputElement.className = "form-control form-control-sm";
-      inputElement.placeholder = "수정할 일을 입력해주세요.";
-      inputElement.value = spanElement.textContent;
-      inputElement.style.marginLeft = "8px";
+      newInput = document.createElement("input");
+      newInput.type = "text";
+      newInput.className = "form-control form-control-sm";
+      newInput.placeholder = "수정할 일을 입력해주세요.";
+      newInput.value = spanElement.textContent;
+      newInput.style.marginLeft = "8px";
 
-      li.insertBefore(inputElement, spanElement);
+      li.insertBefore(newInput, spanElement);
 
-      inputElement.focus();
-      inputElement.setSelectionRange(0, inputElement.value.length);
+      newInput.focus();
+      newInput.setSelectionRange(0, newInput.value.length);
 
       editButton.classList.remove("btn-warning");
       editButton.classList.add("btn-success");
       editButton.textContent = "완료";
 
       // 엔터 키 이벤트 리스너 추가
-      inputElement.addEventListener("keydown", (event) => {
+      newInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
           event.preventDefault(); // 기본 엔터 동작(새 줄 추가) 방지
           completeEdit();
@@ -87,14 +87,14 @@ function makeEditButton(li) {
     } else completeEdit();
 
     function completeEdit() {
-      if (inputElement.value.trim() === "") {
+      if (newInput.value.trim() === "") {
         alert("최소 한 글자 이상 입력해주세요.");
         return;
       }
-      spanElement.textContent = inputElement.value.trim();
+      spanElement.textContent = newInput.value.trim();
       spanElement.style.display = "inline";
 
-      inputElement.remove();
+      newInput.remove();
 
       editButton.classList.remove("btn-success");
       editButton.classList.add("btn-warning");
@@ -155,11 +155,7 @@ function initialize() {
   todoInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       if (todoInput.value.trim() === "") {
-<<<<<<< HEAD
-        alert("할 일을 입력해주세요.");
-=======
         alert("최소 한 글자 이상 입력해주세요.");
->>>>>>> feature/update
         return; // 빈 입력 방지
       }
 
@@ -178,11 +174,7 @@ function initialize() {
 
   addButton.addEventListener("click", () => {
     if (todoInput.value.trim() === "") {
-<<<<<<< HEAD
-      alert("할 일을 입력해주세요.");
-=======
       alert("최소 한 글자 이상 입력해주세요.");
->>>>>>> feature/update
       return;
     }
 
