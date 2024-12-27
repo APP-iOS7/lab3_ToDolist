@@ -45,7 +45,6 @@ function initialize() {
     addTodo(todo.text, todo.checked);
   });
 
-
   todoInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       if (todoInput.value.trim() === "") return; // 빈 입력 방지
@@ -55,12 +54,8 @@ function initialize() {
 
       // // localStorage 업데이트
       const todos = loadTodos();
-      const todoData = {
-        text: todoInput.value,
-        checked: false,
-      };
       todos.push(todoData);
-      saveTodos(todos);
+      saveTodos({ text: todoInput.value, checked: false });
 
       // 입력창 비우기
       todoInput.value = "";
