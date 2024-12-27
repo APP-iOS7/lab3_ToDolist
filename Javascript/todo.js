@@ -87,6 +87,7 @@ function initialize() {
       // // localStorage 업데이트
       const todos = loadTodos();
       saveTodos({ text: todoInput.value, checked: false });
+      saveTodos(todos);
 
       // 입력창 비우기
       todoInput.value = "";
