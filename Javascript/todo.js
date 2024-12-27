@@ -1,6 +1,7 @@
 const todoListElement = document.getElementById("todoList");
 const addButton = document.getElementById("addTodo");
 const todoInput = document.getElementById("todoInput");
+const dropdown = document.getElementById("dropdown");
 
 function addTodo(text, checked = false) {
   // li 요소 만들기
@@ -64,10 +65,20 @@ function saveTodos(todos) {
   localStorage.setItem("todoList", JSON.stringify(todos));
 }
 
-//할 일 목록 가져오기
-function loadTodos() {
+// 할일 목록 가져오기
+function loadTodos(isFiltered = false) {
   const savedTodos = localStorage.getItem("todoList");
-  return savedTodos ? JSON.parse(savedTodos) : [];
+  const todos = savedTodos ? JSON.parse(savedTodos) : [];
+
+  // isCheckedFilter 값에 따라 필터링
+  let filteredTodos;
+  if (isFiltered === true) {
+    filteredTodos = todos.filter((todo) => todo.checked == false);
+  } else {
+    filteredTodos = todos; // 모든 항목 포함
+  }
+
+  return filteredTodos;
 }
 
 //초기화 함수
@@ -79,8 +90,7 @@ function initialize() {
 
   todoInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
-      if (todoInput.value.trim() === "")
-      {
+      if (todoInput.value.trim() === "") {
         alert("할 일을 입력해주세요.");
         return; // 빈 입력 방지
       }
@@ -99,8 +109,7 @@ function initialize() {
   });
 
   addButton.addEventListener("click", () => {
-    if (todoInput.value.trim() === "")
-    {
+    if (todoInput.value.trim() === "") {
       alert("할 일을 입력해주세요.");
       return;
     }
@@ -112,6 +121,40 @@ function initialize() {
     saveTodos(todos);
 
     todoInput.value = "";
+  });
+
+  // 이벤트 설정
+  dropdown.addEventListener("click", function (event) {
+    const target = event.target;
+
+    // a 태그인지 확인
+    if (target.tagName === "A" && target.classList.contains("dropdown-item")) {
+      const action = target.getAttribute("data-action"); // data-action 속성 값 가져오기
+
+      let todos;
+      // 분기 처리
+      switch (action) {
+        case "action1": // 전체보기
+          todos = loadTodos();
+          break;
+        case "action2": // 할일보기
+          todos = loadTodos(true);
+          break;
+        default:
+          console.log("알 수 없는 액션");
+      }
+
+      // 기존 목록 비우기
+      todoListElement.innerHTML = "";
+
+      // 필터링된 항목으로 갱신
+      todos.forEach((todo) => {
+        addTodo(todo.text, todo.checked);
+      });
+
+      // 기본 동작 방지 (필요시)
+      event.preventDefault();
+    }
   });
 }
 
