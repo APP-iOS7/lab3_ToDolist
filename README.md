@@ -1,6 +1,8 @@
 LAB3-ToDo List Project README
 ================
 
+![Uploading ezgif-1-c08acc75f4.gif…]()
+
 프로젝트 소개
 -------------
 복잡한 일상을 심플하게 정리할 수 있는 ToDo List입니다.
